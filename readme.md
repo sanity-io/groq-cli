@@ -1,29 +1,30 @@
-# unicorn-fun-cli [![Build Status](https://travis-ci.org/YOUR-GITHUB-USERNAME/unicorn-fun-cli.svg?branch=master)](https://travis-ci.org/YOUR-GITHUB-USERNAME/unicorn-fun-cli)
+# groq-cli
 
-> My awesome command-line tool
-
+> Run GROQ on JSON documents in the command line
 
 ## Install
 
+```bash
+npm install --global groq-cli
 ```
-$ npm install --global unicorn-fun-cli
-```
-
 
 ## Usage
 
-```
-$ unicorn-fun --help
+```bash
+$ groq --help
 
   Usage
-    $ unicorn-fun [input]
+    $ groq *[<filter>]{<projection>}
 
   Options
-    --postfix  Lorem ipsum  [Default: rainbows]
+    --file  ./path/to/file
+    --pretty colorized JSON output [Default: false]
 
   Examples
-    $ cli-name
-    unicorns & rainbows
-    $ cli-name ponies
-    ponies & rainbows
+    # Query data in a ndjson-file
+    $ groq '*[_type == "post"]{title}' --file ./blog.ndjson
+
+    # Query data from standard input
+    $ curl -s https://jsonplaceholder.typicode.com/todos | groq "*[completed == false]{'mainTitle': title, ...}" --pretty
+
 ```
