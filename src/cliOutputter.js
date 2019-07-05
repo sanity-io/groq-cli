@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-const ora = require('ora')
 const chalk = require('chalk')
 
 let isFirstClear = true
@@ -24,7 +23,4 @@ module.exports = {
     isFirstClear = false
   },
 
-  spinner(...args) {
-    return ora(...args)
-  }
 }

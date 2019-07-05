@@ -51,7 +51,6 @@ function parseDocuments (data) {
   }
 }
 async function parseQuery () {
-  const spinner = output.spinner('Loading data').start()
   const { flags, input } = cli
   const { file, pretty } = flags
   const stdIn = await getStdin()
@@ -65,8 +64,6 @@ async function parseQuery () {
     docs = await parseDocuments(stdIn)
   }
 
-  spinner.text = 'Perfoming query'
-
   const result = await query({
     source: input[0],
     params: {},
@@ -76,8 +73,6 @@ async function parseQuery () {
       /* start: 0 */
     })
   }).then(data => data)
-  spinner.text = 'Query done'
-  spinner.succeed()
   if (pretty) {
 	  return colorizeJson(result, chalk)
   }
