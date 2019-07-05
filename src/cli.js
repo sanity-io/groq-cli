@@ -3,7 +3,7 @@
 /* eslint-disable id-length, no-console, no-process-env, no-sync, no-process-exit */
 const meow = require('meow')
 const fs = require('fs')
-const { query } = require('groq-js')
+const { query } = require('groq-js') // manually linked
 const getStdin = require('get-stdin')
 const chalk = require('chalk')
 const colorizeJson = require('./colorizeJson')
@@ -11,7 +11,8 @@ const output = require('./cliOutputter')
 const cli = meow(
   `
 	Usage
-	  $ groq *[<filter>]{<projection>}
+		$ groq '*[<filter>]{<projection>}'
+		# Remember to alternate quotation marks inside of the query
 
 	Options
 	  --file  ./path/to/file [Default: ./]

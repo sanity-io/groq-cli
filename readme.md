@@ -18,7 +18,8 @@ npm install --global groq-cli
 $ groq --help
 
   Usage
-    $ groq "*[<filter>]{<projection>}"
+    $ groq '*[<filter>]{<projection>}'
+    # Remember to alternate quotation marks inside of the query
 
   Options
     --file  ./path/to/file
@@ -29,7 +30,7 @@ $ groq --help
     $ groq '*[_type == "post"]{title}' --file ./blog.ndjson
 
     # Query data from standard input
-    $ curl -s https://jsonplaceholder.typicode.com/todos | groq "*[completed == false]{'mainTitle': title, ...}" --pretty
+    $ curl -s https://jsonplaceholder.typicode.com/todos | groq '*[completed == false]{"mainTitle": title, ...}' --pretty
 
 ```
 
