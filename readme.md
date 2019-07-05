@@ -18,7 +18,7 @@ npm install --global groq-cli
 $ groq --help
 
   Usage
-    $ groq *[<filter>]{<projection>}
+    $ groq "*[<filter>]{<projection>}"
 
   Options
     --file  ./path/to/file
