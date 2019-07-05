@@ -63,7 +63,9 @@ async function parseQuery () {
   if (stdIn) {
     docs = await parseDocuments(stdIn)
   }
+
   spinner.text = 'Perfoming query'
+
   const result = await query({
     source: input[0],
     params: {},
@@ -81,7 +83,4 @@ async function parseQuery () {
   return chalk(JSON.stringify(result))
 }
 
-(async () => {
-	const result = await parseQuery()
-	output.print(result)
-})()
+parseQuery().then(output.print)
