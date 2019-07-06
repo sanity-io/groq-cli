@@ -8,22 +8,27 @@ const getStdin = require('get-stdin')
 const chalk = require('chalk')
 const colorizeJson = require('./colorizeJson')
 const output = require('./cliOutputter')
+const fromUrl = require('./fromUrl')
 const cli = meow(
   `
-	Usage
-		$ groq '*[<filter>]{<projection>}'
-		# Remember to alternate quotation marks inside of the query
+Usage
+  ${chalk.green(`$ groq '*[<filter>]{<projection>}'`)}
+  ${chalk.grey(`# Remember to alternate quotation marks inside of the query`)}
 
-	Options
-	  --file  ./path/to/file [Default: ./]
-	  --pretty colorized JSON output
+Options
+  ${chalk.green(`--file  ./path/to/file`)}
+  ${chalk.green(`--url https://aniftyapi.dev/endpoint`)}
+  ${chalk.green(`--pretty colorized JSON output [Default: false]`)}
 
-	Examples
-	  # Query data in a ndjson-file
-	  $ groq '*[_type == "post"]{title}' --file ./blog.ndjson
+Examples
+  ${chalk.grey(`# Query data in a ndjson-file`)}
+  ${chalk.green(`$ groq '*[_type == "post"]{title}' --file ./blog.ndjson`)}
 
-	  # Query data from stdIn
-	  $ curl -s https://jsonplaceholder.typicode.com/todos | groq "*[completed == false]{'mainTitle': title, ...}" --pretty
+  ${chalk.grey(`# Query JSON data from an URL`)}
+  ${chalk.green(`$ groq '*[completed == false]{title}' --url https://jsonplaceholder.typicode.com/todos`)}
+
+  ${chalk.grey(`# Query data from stdIn`)}
+  ${chalk.green(`$ curl -s https://jsonplaceholder.typicode.com/todos | groq "*[completed == false]{'mainTitle': title, ...}" --pretty`)}
 
 `,
   {
@@ -31,35 +36,55 @@ const cli = meow(
       file: {
         type: 'string',
         default: undefined
-	  },
-	  pretty: {
-		  type: 'boolean',
-		  default: false
-	  }
+			},
+			url: {
+				type: 'string',
+				default: undefined
+			},
+	  	pretty: {
+				type: 'boolean',
+				default: false
+			}
     }
   }
 )
+
 function parseDocuments (data) {
   try {
     return JSON.parse(data)
   } catch (err) {
-    return data
-      .toString()
-      .trim()
-      .split('\n')
-      .map(JSON.parse)
+		try {
+			return data
+				.toString()
+				.trim()
+				.split('\n')
+				.map(JSON.parse)
+		} catch (error) {
+			throw new Error(`Is the input valid JSON/NDJSON?\n\n${error}`)
+		}
   }
 }
 async function parseQuery () {
   const { flags, input } = cli
-  const { file, pretty } = flags
+  const { file, url, pretty } = flags
   const stdIn = await getStdin()
+
+	if (input.length === 0) {
+		return chalk.yellow('You must add a query. To learn more, run\n\n  $ groq --help')
+	}
+	if (!file || !url || !stdIn) {
+		return chalk.yellow('There’s no data to query. To learn more, run\n\n  $ groq --help')
+	}
 
   let docs = ''
   if (file) {
     const fileContent = await fs.readFileSync(file, 'utf-8')
     docs = await parseDocuments(fileContent)
-  }
+	}
+	if (url) {
+		const urlContent = await fromUrl(url)
+    docs = await parseDocuments(urlContent)
+	}
   if (stdIn) {
     docs = await parseDocuments(stdIn)
   }
