@@ -2,10 +2,11 @@
 
 /* eslint-disable id-length, no-console, no-process-env, no-sync, no-process-exit */
 const meow = require('meow')
-const fs = require('fs')
+const readFileStream = require('./readFileStream')
 const { query } = require('groq-js') // manually linked
 const getStdin = require('get-stdin')
 const chalk = require('chalk')
+require('./gracefulQuit')
 const colorizeJson = require('./colorizeJson')
 const output = require('./cliOutputter')
 const fromUrl = require('./fromUrl')
@@ -48,6 +49,10 @@ Examples
     }
   }
 )
+function handleError(error) {
+	output.print(chalk.red(error))
+	process.emit("SIGINT");
+}
 
 function parseDocuments (data) {
   try {
@@ -72,13 +77,13 @@ async function parseQuery () {
 	if (input.length === 0) {
 		return chalk.yellow('You must add a query. To learn more, run\n\n  $ groq --help')
 	}
-	if (!file || !url || !stdIn) {
+	if (!file && !url && !stdIn) {
 		return chalk.yellow('There’s no data to query. To learn more, run\n\n  $ groq --help')
 	}
 
   let docs = ''
   if (file) {
-    const fileContent = await fs.readFileSync(file, 'utf-8')
+		const fileContent = await readFileStream(file).catch(handleError)
     docs = await parseDocuments(fileContent)
 	}
 	if (url) {
