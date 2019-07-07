@@ -1,45 +1,53 @@
 {
-	"name": "groq-cli",
-	"version": "0.0.1",
-	"description": "Run GROQ in the command line",
-	"license": "MIT",
-	"repository": "sanity-io/groq-cli",
-	"author": {
-		"name": "Knut Melvær",
-		"email": "knut@sanity.io",
-		"url": "https://www.sanity.io"
-	},
-	"bin": {
-		"groq": "bin/groq.js"
-	},
-	"engines": {
-		"node": ">=8"
-	},
-	"scripts": {
-		"test": "xo && ava"
-	},
-	"files": [
-		"cli.js"
-	],
-	"keywords": [
-		"cli",
-		"cli-app",
-		"groq",
-		"sanity.io"
-	],
-	"dependencies": {
-		"chalk": "^2.4.2",
-		"get-it": "^5.0.0",
-		"get-stdin": "^7.0.0",
-		"json-lexer": "^1.1.1",
-		"meow": "^5.0.0"
-	},
-	"devDependencies": {
-		"ava": "^2.1.0",
-		"eslint": "^6.0.1",
-		"eslint-config-prettier": "^6.0.0",
-		"eslint-config-sanity": "^0.141.5",
-		"execa": "^2.0.0",
-		"xo": "^0.24.0"
-	}
+  "name": "groq-cli",
+  "version": "0.0.1",
+  "description": "Run GROQ in the command line",
+  "license": "MIT",
+  "repository": "sanity-io/groq-cli",
+  "author": {
+    "name": "Knut Melvær",
+    "email": "knut@sanity.io",
+    "url": "https://www.sanity.io"
+  },
+  "bin": {
+    "groq": "bin/groq.js"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "scripts": {
+    "test": "eslint . && ava"
+  },
+  "files": [
+    "src",
+    "bin"
+  ],
+  "keywords": [
+    "cli",
+    "cli-app",
+    "groq",
+    "sanity.io"
+  ],
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "get-it": "^5.0.0",
+    "get-stdin": "^7.0.0",
+    "groq": "0.0.9",
+    "json-lexer": "^1.1.1",
+    "meow": "^5.0.0"
+  },
+  "devDependencies": {
+    "ava": "^2.1.0",
+    "eslint": "^5.9.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-config-sanity": "^0.140.0",
+    "execa": "^2.0.0",
+    "prettier": "^1.15.2"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100,
+    "bracketSpacing": false,
+    "singleQuote": true
+  }
 }

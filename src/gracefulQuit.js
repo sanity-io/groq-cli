@@ -1,16 +1,16 @@
-if (process.platform === "win32") {
-	const rl = require("readline").createInterface({
-	  input: process.stdin,
-	  output: process.stdout
-	});
+if (process.platform === 'win32') {
+  const rl = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+  })
 
-	rl.on("SIGINT", function () {
-	  process.emit("SIGINT");
-	});
-  }
+  rl.on('SIGINT', () => {
+    process.emit('SIGINT')
+  })
+}
 
-  process.on("SIGINT", function () {
-	//graceful shutdown
-	console.log('Quitting')
-	process.exit();
-  });
+process.on('SIGINT', () => {
+  // graceful shutdown
+  console.log('Quitting')
+  process.exit()
+})
