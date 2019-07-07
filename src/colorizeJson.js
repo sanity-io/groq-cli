@@ -1,4 +1,5 @@
 const tokenize = require('json-lexer')
+const chalk = require('chalk')
 
 const identity = inp => inp
 const formatters = {
@@ -9,7 +10,7 @@ const formatters = {
   literal: 'bold'
 }
 
-function colorize(input, chalk) {
+function colorize(input) {
   const data = typeof input === 'string' ? JSON.parse(input) : input
   const json = JSON.stringify(data, null, 2)
 

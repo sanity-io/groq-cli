@@ -1,18 +1,12 @@
 const fs = require('fs')
 
-function readFileStream (file) {
-  return new Promise(resolve => {
-    let chunks = ''
-    const stream = fs.createReadStream(file, { encoding: 'utf8' })
-    stream.on('data', chunk => {
-      chunks += chunk
-    })
-    stream.on('close', () => {
-      return resolve(chunks)
-    })
-    stream.on('error', err => {
-      return resolve(err)
-    })
+function readFileStream(file) {
+  return new Promise((resolve, reject) => {
+    const chunks = []
+    const stream = fs.createReadStream(file)
+    stream.on('error', err => reject(err))
+    stream.on('data', chunk => chunks.push(chunk))
+    stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
   })
 }
 
