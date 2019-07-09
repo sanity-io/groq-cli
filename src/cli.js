@@ -3,7 +3,7 @@
 /* eslint-disable id-length, no-process-exit */
 const meow = require('meow')
 const readFileStream = require('./readFileStream')
-const {query} = require('groq')
+const {parse, evaluate} = require('groq-js')
 const getStdin = require('get-stdin')
 const chalk = require('chalk')
 require('./gracefulQuit')
@@ -73,11 +73,8 @@ function parseDocuments(data) {
     }
   }
 }
-async function parseQuery() {
-  const {flags, input} = cli
-  const {file, url, pretty} = flags
-  const stdIn = await getStdin()
 
+function check({input, file, url, stdIn}) {
   if (input.length === 0) {
     return chalk.yellow('You must add a query. To learn more, run\n\n  $ groq --help')
   }
@@ -85,26 +82,31 @@ async function parseQuery() {
     return chalk.yellow('There’s no data to query. To learn more, run\n\n  $ groq --help')
   }
 
-  let docs = []
+  return true
+}
+
+async function parseQuery() {
+  const {flags, input} = cli
+  const {file, url, pretty} = flags
+  const stdIn = await getStdin()
+  if(!check({input, file, url, stdIn})) {
+    return
+  }
+  let documents = []
   if (file) {
     const fileContent = await readFileStream(file).catch(handleError)
-    docs = await parseDocuments(fileContent)
+    documents = await parseDocuments(fileContent)
   } else if (url) {
     const urlContent = await fromUrl(url)
-    docs = await parseDocuments(urlContent)
+    documents = await parseDocuments(urlContent)
   } else if (stdIn) {
-    docs = await parseDocuments(stdIn)
+    documents = await parseDocuments(stdIn)
   }
 
-  const result = await query({
-    source: input[0],
-    params: {},
-    globalFilter: true,
-    fetcher: () => ({
-      results: docs
-      /* start: 0 */
-    })
-  })
+  const query = input[0]
+  const tree = parse(query)
+  const result = await evaluate(tree, {documents}).get()
+
 
   if (pretty) {
     return colorizeJson(result)
