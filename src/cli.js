@@ -58,12 +58,12 @@ function handleError(error) {
   process.emit('SIGINT')
 }
 
-function parseDocuments(data) {
+function parseDocuments(documents) {
   try {
-    return JSON.parse(data)
+    return JSON.parse(documents)
   } catch (err) {
     try {
-      return data
+      return documents
         .toString()
         .trim()
         .split('\n')
@@ -74,22 +74,22 @@ function parseDocuments(data) {
   }
 }
 
-function check({input, file, url, stdIn}) {
-  if (input.length === 0) {
+function check({query, file, url, stdIn}) {
+  if (!query) {
     return chalk.yellow('You must add a query. To learn more, run\n\n  $ groq --help')
   }
   if (!file && !url && !stdIn) {
     return chalk.yellow('There’s no data to query. To learn more, run\n\n  $ groq --help')
   }
-
   return true
 }
 
 async function parseQuery() {
   const {flags, input} = cli
   const {file, url, pretty} = flags
+  const query = input[0]
   const stdIn = await getStdin()
-  if(!check({input, file, url, stdIn})) {
+  if(!check({query, file, url, stdIn})) {
     return
   }
   let documents = []
@@ -103,7 +103,6 @@ async function parseQuery() {
     documents = await parseDocuments(stdIn)
   }
 
-  const query = input[0]
   const tree = parse(query)
   const result = await evaluate(tree, {documents}).get()
 
