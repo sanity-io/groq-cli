@@ -6,6 +6,8 @@ _Currently in alpha._
 
 The CLI tool consumes both JSON and [NDJSON](http://www.ndjson.org) documents. You can pass in data from a local file, or from piping to standard input.
 
+Read the [announcement blog post](https://www.sanity.io/blog/we-re-open-sourcing-groq-a-query-language-for-json-documents), and the [getting started guide](https://www.sanity.io/docs/data-store/how-queries-work).
+
 ## Install
 
 ```bash
