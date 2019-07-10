@@ -11,6 +11,5 @@ if (process.platform === 'win32') {
 
 process.on('SIGINT', () => {
   // graceful shutdown
-  console.log('Quitting')
   process.exit()
 })
