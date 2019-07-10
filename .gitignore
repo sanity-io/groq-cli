@@ -2,3 +2,9 @@ node_modules
 yarn.lock
 .json
 .ndjson
+wines/data.ndjson
+nobel.json
+production.tar.gz
+sanity.ndjson
+wines.ndjson
+wines/assets.json
