@@ -22,26 +22,36 @@ This CLI requires Node v10 or later.
 
 ```bash
 $ groq --help
+  Run GROQ in the command line
 
   Usage
     $ groq '*[<filter>]{<projection>}'
     # Remember to alternate quotation marks inside of the query
 
   Options
-    --file  ./path/to/file
-    --url https://aniftyapi.dev/endpoint
-    --pretty colorized JSON output [Default: false]
+    -i, --input   One of: ndjson, json, null
+    -o, --output  One of: ndjson, json, pretty
+    -p, --pretty  Shortcut for --output=pretty
+
+  Input formats
+    json      Reads a JSON object from stdin.
+    ndjson    Reads a JSON stream from stdin.
+    null      Reads nothing.
+
+  Output formats
+    json      Formats the output as JSON.
+    pretty    Formats the output as pretty JSON.
+    ndjson    Streams the result as NDJSON.
 
   Examples
-    # Query data in a ndjson-file
-    $ groq '*[_type == "post"]{title}' --file ./blog.ndjson
+    # Query data in a file
+    $ cat blog.json | groq 'count(posts)'
+
+    # Query data in a NDJSON file
+    $ cat blog.ndjson | groq --input ndjson '*[_type == "post"]{title}'
 
     # Query JSON data from an URL
-    $ groq '*[completed == false]{title}' --url https://jsonplaceholder.typicode.com/todos
-
-    # Query data from stdIn
-    $ curl -s https://jsonplaceholder.typicode.com/todos | groq "*[completed == false]{'mainTitle': title, ...}" --pretty
-
+    $ curl -s https://jsonplaceholder.typicode.com/todos | groq  --pretty '*[completed == false]{title}'
 ```
 
 ## Similar tools
