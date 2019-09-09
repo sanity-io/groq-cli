@@ -22,25 +22,25 @@ Options
   ${chalk.green(`-p, --pretty  Shortcut for --output=pretty`)}
 
 Input formats
-  ${chalk.green(`json`)}      Reads a JSON object from stdin. Available as @ in query.
-  ${chalk.green(`ndjson`)}    Reads a JSON stream from stdin. Available as * in query.
+  ${chalk.green(`json`)}      Reads a JSON object from stdin.
+  ${chalk.green(`ndjson`)}    Reads a JSON stream from stdin.
   ${chalk.green(`null`)}      Reads nothing.
 
 Output formats
   ${chalk.green(`json`)}      Formats the output as JSON.
-  ${chalk.green(`pretty`)}    Pretty prints the output.
+  ${chalk.green(`pretty`)}    Formats the output as pretty JSON.
   ${chalk.green(`ndjson`)}    Streams the result as NDJSON.
 
 Examples
   ${chalk.grey(`# Query data in a file`)}
-  ${chalk.green(`$ cat blog.json | groq 'count(posts.length)' `)}
+  ${chalk.green(`$ cat blog.json | groq 'count(posts)' `)}
 
   ${chalk.grey(`# Query data in a NDJSON file`)}
   ${chalk.green(`$ cat blog.ndjson | groq --input ndjson '*[_type == "post"]{title}' `)}
 
   ${chalk.grey(`# Query JSON data from an URL`)}
   ${chalk.green(
-    `$ curl -s https://jsonplaceholder.typicode.com/todos | groq  --pretty '@[completed == false]{title}'`
+    `$ curl -s https://jsonplaceholder.typicode.com/todos | groq  --pretty '*[completed == false]{title}'`
   )}
 `,
   {
@@ -103,21 +103,22 @@ async function* runQuery() {
 
   const tree = parse(query)
 
-  let documents
   let root
+  let dataset
 
   switch (inputFormat) {
     case 'json':
-      root = JSON.parse(await getStdin())
+      dataset = JSON.parse(await getStdin())
+      root = dataset
       break
     case 'ndjson':
-      documents = new S2A(process.stdin.pipe(ndjson()))
+      dataset = new S2A(process.stdin.pipe(ndjson()))
       break
     default:
       // do nothing
   }
 
-  const result = await evaluate(tree, { documents, root })
+  const result = await evaluate(tree, { dataset, root })
 
   switch (outputFormat) {
     case 'json':
