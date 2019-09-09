@@ -69,6 +69,12 @@ function handleError (error) {
   process.emit('SIGINT')
 }
 
+function validateChoice(title, input, choices) {
+  if (!choices.includes(input)) {
+    throw Error(chalk.yellow(`Unknown ${title}: ${input}. Valid choices are: ${choices.join(', ')}.`))
+  }
+}
+
 function check ({ query, inputFormat, outputFormat }) {
   if (!query) {
     throw Error(
@@ -78,13 +84,8 @@ function check ({ query, inputFormat, outputFormat }) {
     )
   }
 
-  if (!/^(json|ndjson|null)$/.test(inputFormat)) {
-    throw Error(chalk.yellow(`Unknown input format: ${inputFormat}`))
-  }
-
-  if (!/^(json|ndjson|pretty)$/.test(outputFormat)) {
-    throw Error(chalk.yellow(`Unknown output format: ${outputFormat}`))
-  }
+  validateChoice("input format", inputFormat, ['json', 'ndjson', 'null'])
+  validateChoice("output format", outputFormat, ['json', 'ndjson', 'pretty'])
 
   return true
 }
