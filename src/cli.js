@@ -122,9 +122,11 @@ async function* runQuery() {
   switch (outputFormat) {
     case 'json':
       yield JSON.stringify(await result.get())
+      yield "\n"
       break
     case 'pretty':
       yield colorizeJson(await result.get())
+      yield "\n"
       break
     case 'ndjson':
       if (result.getType() == 'array') {
