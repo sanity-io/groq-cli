@@ -20,6 +20,7 @@ Options
   ${chalk.green(`-i, --input   One of: ndjson, json, null`)}
   ${chalk.green(`-o, --output  One of: ndjson, json, pretty`)}
   ${chalk.green(`-p, --pretty  Shortcut for --output=pretty`)}
+  ${chalk.green(`-n, --ndjson  Shortcut for --input=ndjson --output=ndjson`)}
 
 Input formats
   ${chalk.green(`json`)}      Reads a JSON object from stdin.
@@ -48,6 +49,11 @@ Examples
       pretty: {
         type: 'boolean',
         alias: 'p',
+        default: false
+      },
+      ndjson: {
+        type: 'boolean',
+        alias: 'n',
         default: false
       },
       input: {
@@ -92,12 +98,18 @@ function check ({ query, inputFormat, outputFormat }) {
 
 async function* runQuery() {
   const { flags, input } = cli
-  const { input: inputFormat, pretty } = flags
-  let { output: outputFormat } = flags
+  const { pretty } = flags
+  let { input: inputFormat, output: outputFormat } = flags
 
   const query = input[0]
+
   if (pretty) {
     outputFormat = 'pretty'
+  }
+
+  if (ndjson) {
+    outputFormat = 'ndjson'
+    inputFormat = 'ndjson'
   }
 
   check({ query, inputFormat, outputFormat })

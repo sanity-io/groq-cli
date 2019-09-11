@@ -32,6 +32,7 @@ $ groq --help
     -i, --input   One of: ndjson, json, null
     -o, --output  One of: ndjson, json, pretty
     -p, --pretty  Shortcut for --output=pretty
+    -n, --ndjson  Shortcut for --input=ndjson --output=ndjson
 
   Input formats
     json      Reads a JSON object from stdin.
