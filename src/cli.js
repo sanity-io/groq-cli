@@ -96,9 +96,52 @@ function check ({ query, inputFormat, outputFormat }) {
   return true
 }
 
+async function* outputJSON(result) {
+  yield JSON.stringify(await result.get())
+  yield "\n"
+}
+
+async function* outputPrettyJSON(result) {
+  yield colorizeJson(await result.get())
+  yield "\n"
+}
+
+async function* outputNDJSON(result) {
+  if (result.getType() == 'array') {
+    for await (const value of result) {
+      yield JSON.stringify(await value.get())
+      yield "\n"
+    }
+  } else {
+    yield JSON.stringify(await result.get())
+    yield "\n"
+  }
+}
+
+const OUTPUTTERS = {
+  json: outputJSON,
+  pretty: outputPrettyJSON,
+  ndjson: outputNDJSON,
+}
+
+async function inputJSON() {
+  const dataset = JSON.parse(await getStdin())
+  return {dataset, root: dataset}
+}
+
+function inputNDJSON() {
+  const dataset = new S2A(process.stdin.pipe(ndjson()))
+  return {dataset}
+}
+
+const INPUTTERS = {
+  json: inputJSON,
+  ndjson: inputNDJSON,
+}
+
 async function* runQuery() {
   const { flags, input } = cli
-  const { pretty } = flags
+  const { pretty, ndjson: isNdjson } = flags
   let { input: inputFormat, output: outputFormat } = flags
 
   const query = input[0]
@@ -107,56 +150,26 @@ async function* runQuery() {
     outputFormat = 'pretty'
   }
 
-  if (ndjson) {
+  if (isNdjson) {
     outputFormat = 'ndjson'
     inputFormat = 'ndjson'
   }
 
   check({ query, inputFormat, outputFormat })
 
+  // Parse query
   const tree = parse(query)
 
-  let root
-  let dataset
+  // Read input
+  const inputter = INPUTTERS[inputFormat]
+  const options = await inputter()
 
-  switch (inputFormat) {
-    case 'json':
-      dataset = JSON.parse(await getStdin())
-      root = dataset
-      break
-    case 'ndjson':
-      dataset = new S2A(process.stdin.pipe(ndjson()))
-      break
-    default:
-      // do nothing
-  }
+  // Execute query
+  const result = await evaluate(tree, options)
 
-  const result = await evaluate(tree, { dataset, root })
-
-  switch (outputFormat) {
-    case 'json':
-      yield JSON.stringify(await result.get())
-      yield "\n"
-      break
-    case 'pretty':
-      yield colorizeJson(await result.get())
-      yield "\n"
-      break
-    case 'ndjson':
-      if (result.getType() == 'array') {
-        // eslint-disable-next-line max-depth
-        for await (const value of result) {
-          yield JSON.stringify(await value.get())
-          yield "\n"
-        }
-      } else {
-        yield JSON.stringify(await result.get())
-        yield "\n"
-      }
-      break
-    default:
-        // do nothing
-  }
+  // Stream output
+  const streamer = OUTPUTTERS[outputFormat]
+  yield* await streamer(result)
 }
 
 async function main() {
