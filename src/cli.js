@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /* eslint-disable id-length, no-process-exit */
-require("regenerator-runtime/runtime")
+require('regenerator-runtime/runtime')
 const meow = require('meow')
-const { parse, evaluate } = require('groq-js')
+const {parse, evaluate} = require('groq-js')
 const getStdin = require('get-stdin')
 const chalk = require('chalk')
 const ndjson = require('ndjson')
@@ -70,63 +70,61 @@ Examples
   }
 )
 
-function handleError (error) {
+function handleError(error) {
   console.error(chalk.red(error))
   process.emit('SIGINT')
 }
 
 function validateChoice(title, input, choices) {
   if (!choices.includes(input)) {
-    throw Error(chalk.yellow(`Unknown ${title}: ${input}. Valid choices are: ${choices.join(', ')}.`))
+    throw Error(
+      chalk.yellow(`Unknown ${title}: ${input}. Valid choices are: ${choices.join(', ')}.`)
+    )
   }
 }
 
-function check ({ query, inputFormat, outputFormat }) {
+function check({query, inputFormat, outputFormat}) {
   if (!query) {
-    throw Error(
-      chalk.yellow(
-        'You must add a query. To learn more, run\n\n  $ groq --help'
-      )
-    )
+    throw Error(chalk.yellow('You must add a query. To learn more, run\n\n  $ groq --help'))
   }
 
-  validateChoice("input format", inputFormat, ['json', 'ndjson', 'null'])
-  validateChoice("output format", outputFormat, ['json', 'ndjson', 'pretty'])
+  validateChoice('input format', inputFormat, ['json', 'ndjson', 'null'])
+  validateChoice('output format', outputFormat, ['json', 'ndjson', 'pretty'])
 
   return true
 }
 
 async function* outputJSON(result) {
   yield JSON.stringify(await result.get())
-  yield "\n"
+  yield '\n'
 }
 
 async function* outputPrettyJSON(result) {
   yield colorizeJson(await result.get())
-  yield "\n"
+  yield '\n'
 }
 
 async function* outputNDJSON(result) {
   if (result.getType() == 'array') {
     for await (const value of result) {
       yield JSON.stringify(await value.get())
-      yield "\n"
+      yield '\n'
     }
   } else {
     yield JSON.stringify(await result.get())
-    yield "\n"
+    yield '\n'
   }
 }
 
 const OUTPUTTERS = {
   json: outputJSON,
   pretty: outputPrettyJSON,
-  ndjson: outputNDJSON,
+  ndjson: outputNDJSON
 }
 
 async function inputJSON() {
   const input = await getStdin()
-  const dataset = input === "" ? null : JSON.parse(input)
+  const dataset = input === '' ? null : JSON.parse(input)
   return {dataset, root: dataset}
 }
 
@@ -142,13 +140,13 @@ function inputNull() {
 const INPUTTERS = {
   json: inputJSON,
   ndjson: inputNDJSON,
-  null: inputNull,
+  null: inputNull
 }
 
 async function* runQuery() {
-  const { flags, input } = cli
-  const { pretty, ndjson: isNdjson } = flags
-  let { input: inputFormat, output: outputFormat } = flags
+  const {flags, input} = cli
+  const {pretty, ndjson: isNdjson} = flags
+  let {input: inputFormat, output: outputFormat} = flags
 
   const query = input[0]
 
@@ -161,7 +159,7 @@ async function* runQuery() {
     inputFormat = 'ndjson'
   }
 
-  check({ query, inputFormat, outputFormat })
+  check({query, inputFormat, outputFormat})
 
   // Parse query
   const tree = parse(query)
