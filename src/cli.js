@@ -17,10 +17,10 @@ Usage
   ${chalk.grey(`# Remember to alternate quotation marks inside of the query`)}
 
 Options
-  ${chalk.green(`-i, --input   One of: ndjson, json, null`)}
-  ${chalk.green(`-o, --output  One of: ndjson, json, pretty`)}
-  ${chalk.green(`-p, --pretty  Shortcut for --output=pretty`)}
-  ${chalk.green(`-n, --ndjson  Shortcut for --input=ndjson --output=ndjson`)}
+  ${chalk.green(`-i, --input`)}   One of: ndjson, json, null
+  ${chalk.green(`-o, --output`)}  One of: ndjson, json, pretty
+  ${chalk.green(`-p, --pretty`)}  Shortcut for --output=pretty
+  ${chalk.green(`-n, --ndjson`)}  Shortcut for --input=ndjson --output=ndjson
 
 Input formats
   ${chalk.green(`json`)}      Reads a JSON object from stdin.
