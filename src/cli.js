@@ -134,9 +134,14 @@ function inputNDJSON() {
   return {dataset}
 }
 
+function inputNull() {
+  return {}
+}
+
 const INPUTTERS = {
   json: inputJSON,
   ndjson: inputNDJSON,
+  null: inputNull,
 }
 
 async function* runQuery() {
