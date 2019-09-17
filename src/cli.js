@@ -125,7 +125,8 @@ const OUTPUTTERS = {
 }
 
 async function inputJSON() {
-  const dataset = JSON.parse(await getStdin())
+  const input = await getStdin()
+  const dataset = input === "" ? null : JSON.parse(input)
   return {dataset, root: dataset}
 }
 
