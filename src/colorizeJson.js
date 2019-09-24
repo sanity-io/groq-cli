@@ -11,8 +11,7 @@ const formatters = {
 }
 
 function colorize(input) {
-  const data = typeof input === 'string' ? JSON.parse(input) : input
-  const json = JSON.stringify(data, null, 2)
+  const json = JSON.stringify(input, null, 2)
 
   return tokenize(json)
     .map((token, i, arr) => {
