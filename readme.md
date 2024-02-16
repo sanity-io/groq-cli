@@ -4,7 +4,7 @@ _Currently in alpha._
 
 > Easy wrangling of JSON documents with [GROQ](https://github.com/sanity-io/groq) in the command line.
 
-The CLI tool consumes both JSON and [NDJSON](http://www.ndjson.org) documents. You can pass in data from a local file, or from piping to standard input.
+The CLI tool consumes both JSON and [NDJSON](https://github.com/ndjson/ndjson-spec)) documents. You can pass in data from a local file, or from piping to standard input.
 
 Read the [announcement blog post](https://www.sanity.io/blog/we-re-open-sourcing-groq-a-query-language-for-json-documents), and the [getting started guide](https://www.sanity.io/docs/data-store/how-queries-work).
 
