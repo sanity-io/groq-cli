@@ -1,13 +1,13 @@
 const tokenize = require('json-lexer')
 const chalk = require('chalk')
 
-const identity = inp => inp
+const identity = (inp) => inp
 const formatters = {
   punctuator: 'white',
   key: 'white',
   string: 'green',
   number: 'yellow',
-  literal: 'bold'
+  literal: 'bold',
 }
 
 function colorize(input) {
