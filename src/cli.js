@@ -41,7 +41,7 @@ Examples
 
   ${chalk.grey(`# Query JSON data from an URL`)}
   ${chalk.green(
-    `$ curl -s https://jsonplaceholder.typicode.com/todos | groq  --pretty '*[completed == false]{title}'`
+    `$ curl -s https://jsonplaceholder.typicode.com/todos | groq  --pretty '*[completed == false]{title}'`,
   )}
 `,
   {
@@ -49,25 +49,25 @@ Examples
       pretty: {
         type: 'boolean',
         alias: 'p',
-        default: false
+        default: false,
       },
       ndjson: {
         type: 'boolean',
         alias: 'n',
-        default: false
+        default: false,
       },
       input: {
         type: 'string',
         alias: 'i',
-        default: 'json'
+        default: 'json',
       },
       output: {
         type: 'string',
         alias: 'o',
-        default: 'json'
-      }
-    }
-  }
+        default: 'json',
+      },
+    },
+  },
 )
 
 function handleError(error) {
@@ -78,7 +78,7 @@ function handleError(error) {
 function validateChoice(title, input, choices) {
   if (!choices.includes(input)) {
     throw Error(
-      chalk.yellow(`Unknown ${title}: ${input}. Valid choices are: ${choices.join(', ')}.`)
+      chalk.yellow(`Unknown ${title}: ${input}. Valid choices are: ${choices.join(', ')}.`),
     )
   }
 }
@@ -119,7 +119,7 @@ async function* outputNDJSON(result) {
 const OUTPUTTERS = {
   json: outputJSON,
   pretty: outputPrettyJSON,
-  ndjson: outputNDJSON
+  ndjson: outputNDJSON,
 }
 
 async function inputJSON() {
@@ -140,7 +140,7 @@ function inputNull() {
 const INPUTTERS = {
   json: inputJSON,
   ndjson: inputNDJSON,
-  null: inputNull
+  null: inputNull,
 }
 
 async function* runQuery() {

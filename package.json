@@ -16,7 +16,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "eslint ."
+    "test": "eslint . && prettier --check ./src ./bin"
   },
   "files": [
     "src",
