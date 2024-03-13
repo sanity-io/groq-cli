@@ -16,7 +16,8 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "eslint . && prettier --check ./src ./bin"
+    "test": "echo '[{\"foo\": 1}]' | ./bin/groq.js --pretty '*[]{ foo }'",
+    "lint": "eslint . && prettier --check ./src ./bin"
   },
   "files": [
     "src",
@@ -39,6 +40,7 @@
     "stream-to-async-iterator": "^1.0.0"
   },
   "devDependencies": {
+    "@sanity/semantic-release-preset": "^4.1.7",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-sanity": "^7.1.1",
@@ -49,5 +51,8 @@
     "printWidth": 100,
     "bracketSpacing": false,
     "singleQuote": true
+  },
+  "publishConfig": {
+    "provenance": true
   }
 }
