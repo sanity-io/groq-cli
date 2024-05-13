@@ -105,13 +105,15 @@ async function* outputPrettyJSON(result) {
 }
 
 async function* outputNDJSON(result) {
-  if (result.getType() == 'array') {
-    for await (const value of result) {
-      yield JSON.stringify(await value.get())
+  const value = await result.get()
+
+  if (Array.isArray(value)) {
+    for await (const row of value) {
+      yield JSON.stringify(row)
       yield '\n'
     }
   } else {
-    yield JSON.stringify(await result.get())
+    yield JSON.stringify(value)
     yield '\n'
   }
 }
@@ -129,7 +131,7 @@ async function inputJSON() {
 }
 
 function inputNDJSON() {
-  const dataset = new S2A(process.stdin.pipe(ndjson()))
+  const dataset = new S2A(process.stdin.pipe(ndjson.parse()))
   return {dataset}
 }
 
