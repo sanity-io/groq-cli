@@ -16,7 +16,9 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "echo '[{\"foo\": 1}]' | ./bin/groq.js --pretty '*[]{ foo }'",
+    "test": "npm run test:json && npm run test:ndjson",
+    "test:json": "echo '[{\"foo\": 1}]' | ./bin/groq.js --pretty '*[]{ foo }'",
+    "test:ndjson": "echo '{\"foo\": 1}\n{\"bar\": 2}' | ./bin/groq.js -n --pretty '*[]'",
     "lint": "eslint . && prettier --check ./src ./bin"
   },
   "files": [
