@@ -105,15 +105,13 @@ async function* outputPrettyJSON(result) {
 }
 
 async function* outputNDJSON(result) {
-  const value = await result.get()
-
-  if (Array.isArray(value)) {
-    for await (const row of value) {
-      yield JSON.stringify(row)
+  if (result.type == 'stream') {
+    for await (const value of result) {
+      yield JSON.stringify(await value.get())
       yield '\n'
     }
   } else {
-    yield JSON.stringify(value)
+    yield JSON.stringify(await result.get())
     yield '\n'
   }
 }

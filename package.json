@@ -18,7 +18,7 @@
   "scripts": {
     "test": "npm run test:json && npm run test:ndjson",
     "test:json": "echo '[{\"foo\": 1}]' | ./bin/groq.js --pretty '*[]{ foo }'",
-    "test:ndjson": "echo '{\"foo\": 1}\n{\"bar\": 2}' | ./bin/groq.js -n --pretty '*[]'",
+    "test:ndjson": "echo '{\"foo\": [1,2,3,4]}\n{\"bar\": [2]}' | ./bin/groq.js -n --pretty '*[].foo'",
     "lint": "eslint . && prettier --check ./src ./bin"
   },
   "files": [
