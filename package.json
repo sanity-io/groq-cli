@@ -21,8 +21,16 @@
     "test:ndjson": "echo '{\"foo\": [1,2,3,4]}\n{\"bar\": [2]}' | ./bin/groq.js -n --pretty '*[].foo'",
     "lint": "eslint . && prettier --check ./src ./bin"
   },
-  "files": ["src", "bin"],
-  "keywords": ["cli", "cli-app", "groq", "sanity.io"],
+  "files": [
+    "src",
+    "bin"
+  ],
+  "keywords": [
+    "cli",
+    "cli-app",
+    "groq",
+    "sanity.io"
+  ],
   "dependencies": {
     "chalk": "^4.0.0",
     "get-stdin": "^8.0.0",
@@ -34,7 +42,7 @@
     "stream-to-async-iterator": "^1.0.0"
   },
   "devDependencies": {
-    "@sanity/semantic-release-preset": "^4.1.8",
+    "@sanity/semantic-release-preset": "^5.0.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-sanity": "^7.1.2",
