@@ -16,7 +16,7 @@ npm install --global groq-cli
 
 ## Requirements
 
-This CLI requires Node v10 or later.
+This CLI requires Node v18 or later.
 
 ## Usage
 
@@ -30,9 +30,10 @@ $ groq --help
 
   Options
     -i, --input   One of: ndjson, json, null
-    -o, --output  One of: ndjson, json, pretty
+    -o, --output  One of: ndjson, json, pretty, type-nodes
     -p, --pretty  Shortcut for --output=pretty
     -n, --ndjson  Shortcut for --input=ndjson --output=ndjson
+    -s, --schema  Path to a schema file, only required when output is set to "type-nodes"
 
   Input formats
     json      Reads a JSON object from stdin.

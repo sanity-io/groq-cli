@@ -2,8 +2,9 @@
 
 /* eslint-disable id-length, no-process-exit */
 require('regenerator-runtime/runtime')
+const fs = require('fs/promises')
 const meow = require('meow')
-const {parse, evaluate} = require('groq-js')
+const {parse, evaluate, typeEvaluate} = require('groq-js')
 const getStdin = require('get-stdin')
 const chalk = require('chalk')
 const ndjson = require('ndjson')
@@ -18,9 +19,10 @@ Usage
 
 Options
   ${chalk.green(`-i, --input`)}   One of: ndjson, json, null
-  ${chalk.green(`-o, --output`)}  One of: ndjson, json, pretty
+  ${chalk.green(`-o, --output`)}  One of: ndjson, json, pretty, type-nodes
   ${chalk.green(`-p, --pretty`)}  Shortcut for --output=pretty
   ${chalk.green(`-n, --ndjson`)}  Shortcut for --input=ndjson --output=ndjson
+  ${chalk.green(`-s, --schema`)}  Path to a schema file, only required when output is set to "type-nodes"
 
 Input formats
   ${chalk.green(`json`)}      Reads a JSON object from stdin.
@@ -66,6 +68,11 @@ Examples
         alias: 'o',
         default: 'json',
       },
+      schema: {
+        type: 'string',
+        alias: 's',
+        default: '',
+      },
     },
   },
 )
@@ -83,13 +90,17 @@ function validateChoice(title, input, choices) {
   }
 }
 
-function check({query, inputFormat, outputFormat}) {
+function check({query, inputFormat, outputFormat, schemaPath}) {
   if (!query) {
     throw Error(chalk.yellow('You must add a query. To learn more, run\n\n  $ groq --help'))
   }
 
   validateChoice('input format', inputFormat, ['json', 'ndjson', 'null'])
-  validateChoice('output format', outputFormat, ['json', 'ndjson', 'pretty'])
+  validateChoice('output format', outputFormat, ['json', 'ndjson', 'pretty', 'type-nodes'])
+
+  if (outputFormat === 'type-nodes' && schemaPath === '') {
+    throw Error(chalk.yellow('You must provide a schema file with the --schema flag'))
+  }
 
   return true
 }
@@ -146,7 +157,7 @@ const INPUTTERS = {
 async function* runQuery() {
   const {flags, input} = cli
   const {pretty, ndjson: isNdjson} = flags
-  let {input: inputFormat, output: outputFormat} = flags
+  let {input: inputFormat, output: outputFormat, schema: schemaPath} = flags
 
   const query = input[0]
 
@@ -159,7 +170,7 @@ async function* runQuery() {
     inputFormat = 'ndjson'
   }
 
-  check({query, inputFormat, outputFormat})
+  check({query, inputFormat, outputFormat, schemaPath})
 
   // Parse query
   const tree = parse(query)
@@ -167,6 +178,13 @@ async function* runQuery() {
   // Read input
   const inputter = INPUTTERS[inputFormat]
   const options = await inputter()
+  console.log(outputFormat)
+  if (outputFormat === 'type-nodes') {
+    const schemaData = JSON.parse(await fs.readFile(schemaPath))
+    const result = typeEvaluate(tree, schemaData)
+    yield colorizeJson(result)
+    return
+  }
 
   // Execute query
   const result = await evaluate(tree, options)
