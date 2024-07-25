@@ -5,6 +5,17 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.0](https://github.com/sanity-io/groq-cli/compare/v0.3.1...v0.4.0) (2024-07-25)
+
+### Features
+
+- add type-nodes as an output format ([0e9d259](https://github.com/sanity-io/groq-cli/commit/0e9d259af5b9bbfce2c97c80bf2252eb9b44e712))
+- upgrade groq-js to latest ([0cc7457](https://github.com/sanity-io/groq-cli/commit/0cc7457291d22ccd7a3668b6d2c60862680bfb5b))
+
+### Bug Fixes
+
+- **deps:** Update non-major ([177b892](https://github.com/sanity-io/groq-cli/commit/177b892eb275fac14341332d53dc85df809f1114))
+
 ## [0.3.1](https://github.com/sanity-io/groq-cli/compare/v0.3.0...v0.3.1) (2024-05-14)
 
 ### Bug Fixes
