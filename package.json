@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "chalk": "^4.0.0",
-    "get-stdin": "^8.0.0",
+    "get-stdin": "^9.0.0",
     "groq-js": "^1.11.1",
     "json-lexer": "^1.2.0",
     "meow": "^9.0.0",
