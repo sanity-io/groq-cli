@@ -178,7 +178,6 @@ async function* runQuery() {
   // Read input
   const inputter = INPUTTERS[inputFormat]
   const options = await inputter()
-  console.log(outputFormat)
   if (outputFormat === 'type-nodes') {
     const schemaData = JSON.parse(await fs.readFile(schemaPath))
     const result = typeEvaluate(tree, schemaData)
