@@ -1,6 +1,6 @@
 {
   "name": "groq-cli",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Run GROQ in the command line",
   "license": "MIT",
   "repository": "sanity-io/groq-cli",

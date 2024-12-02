@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.1](https://github.com/sanity-io/groq-cli/compare/v0.4.0...v0.4.1) (2024-12-02)
+
+### Bug Fixes
+
+- remove console.log ([7672186](https://github.com/sanity-io/groq-cli/commit/7672186372c436234e700f841bde3c61ae5546f2))
+
 ## [0.4.0](https://github.com/sanity-io/groq-cli/compare/v0.3.1...v0.4.0) (2024-07-25)
 
 ### Features
