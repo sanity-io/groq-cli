@@ -50,9 +50,7 @@ jobs:
 
   release:
     permissions:
-      contents: write # to be able to publish a GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
+      contents: read
       id-token: write # to enable use of OIDC for npm provenance
     name: Semantic release
     needs: build
@@ -60,11 +58,19 @@ jobs:
     if: github.event.inputs.release == 'true'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ secrets.ECOSPARK_APP_ID }}
+          private-key: ${{ secrets.ECOSPARK_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
         with:
           # Need to fetch entire commit history to
           # analyze every commit since last release
           fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
@@ -76,5 +82,5 @@ jobs:
         # e.g. git tags were pushed but it exited before `npm publish`
         if: always()
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
